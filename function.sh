@@ -1,49 +1,43 @@
-#!/bin/bash
+#Define the path of log file
+LOG_FILE="/tmp/process_log.txt"
 
-ssh_user=/home/ubuntu/asignment_ssh/ssh_user.txt
-
-#Add ssh connection
-add_ssh (){
-	if grep -qi "$name:" "$ssh_user" ; then
-		echo "$name ssh connection already added"
-	else
-	echo "$name: ssh $key $port $user@$host" >> ssh_user.txt
-	fi
-}
-#List ssh connection
-list_ssh (){
-	if [ -s $ssh_user ]; then
-		if [ $1 = true ]; then
-			cat $ssh_user
-		else
-			awk '{print $1}' $ssh_user
-		fi
-	fi
+#log running processes
+log() {
+    ps aux > "$LOG_FILE"
+    echo "Current running processes logged to $LOG_FILE."
 }
 
-#update ssh connection
-update_ssh (){
-	if grep -q "$name:" "$ssh_user"; then
-		sed -i "/"$name:"/s|ssh .*@.*|ssh $key $port $user@$host|" ssh_user.txt
-	fi
+# delete the log file
+log_delete() {
+    if [[ -f "$LOG_FILE" ]]; then
+        read -p "Are you sure you want to delete the log file $LOG_FILE? (y/n): " answer
+        if [[ "$answer" == "y" ]]; then
+            rm "$LOG_FILE"
+            echo "Log file $LOG_FILE deleted."
+        else
+            echo "Log file deletion canceled."
+        fi
+    else
+        echo "Log file $LOG_FILE does not exist."
+    fi
 }
 
-#delete ssh connection
-del_ssh (){
-	if grep -q "$server:" "$ssh_user"; then
-	sed -i /"$server":/d $ssh_user
-	else
-		echo "not found"
-	fi
-}
+if [[ -f "$LOG_FILE" ]]; then
+    echo "Log file still exists."
+else
+    echo "Log file has been successfully deleted.!"
+fi
 
-#connect to ssh server
-connect_ssh (){
-		local server=$1
-		if grep -q "^$server:" ssh_user.txt; then
-	ssh_ip_info=$(grep "^$server:" ssh_user.txt | awk '{$1=""}; {print $0}')
-	$ssh_ip_info
-	else
-	echo "[ERROR]: Server information is not available, please add server first"
-		fi
+#elevate the priority of a process
+priority() {
+    read -p "Enter the PID of the process to elevate its priority: " pid
+    read -p "Enter the new priority value (-20 to 19): " priority
+
+    if ps -p "$pid" > /dev/null; then
+        echo "Changing priority of process $pid to $priority."
+        renice "$priority" -p "$pid"
+        echo "Priority of process $pid changed to $priority."
+    else
+        echo "Process $pid is not running."
+    fi
 }
