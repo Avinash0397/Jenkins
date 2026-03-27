@@ -1,106 +1,73 @@
-## Assignment 6 - Process Management Tools ##
-In this assignment, we will build three process management utilities using shell scripting. 
-These tools will help us monitor, control, and manage system processes and services in a Linux environment.
+## Git Branches, Tags, and Commit Report Management ##
+This assignment focuses on creating three useful Git management scripts to manage branches, tags, and commit reports. 
 
-### Part A: Process Management Utility (otProcessManager) ###
-This script helps us check running processes, kill, or monitor them based on different conditions.
+### Part A: Branch Management (gitBranches.sh) ###
+This script helps us manage Git branches by allowing us to list, create, delete, merge, and rebase branches.
 
-Show Top N Processes Using Memory
+List Branches
 
-(Shows top 5 processes using the most memory)
+Show all the branches in the repository.
 
-``` ./otProcessManager topProcess 5 memory ```
+```./gitBranches.sh -l```
 
+Create a Branch
 
+Create a new branch in the repository.
 
-Show Top N Processes Using CPU
+```./gitBranches.sh -b <branch_name>```
 
-(Shows top 10 processes using the most CPU)
+Delete a Branch
 
-``` ./otProcessManager topProcess 10 cpu ```
+Delete an existing branch.
 
+```./gitBranches.sh -d <branch_name>```
 
+Merge Two Branches
 
-Kill the Process with the Lowest Priority
+Merge one branch into another.
 
-``` ./otProcessManager killLeastPriorityProcess ```
+```./gitBranches.sh -m -1 <branch_name1> -2 <branch_name2>```
 
+Rebase Two Branches
 
-Show How Long a Process Has Been Running
+Rebase one branch onto another.
 
-``` ./otProcessManager RunningDurationProcess <processName or processID> ```
+```./gitBranches.sh -r -1 <branch_name1> -2 <branch_name2>```
 
+## Part B: Tag Management (gitTags.sh) ##
+This script helps us manage Git tags by allowing us to create, list, and delete tags.
 
-List Orphan Processes
+Create a new tag in the repository.
 
-(These are processes whose parent has ended)
+```./gitTags.sh -t <tag_name>```
 
-``` ./otProcessManager listOrphanProcess ```
+List Tags
 
+List all tags in the repository.
 
-List Zombie Processes
+```./gitTags.sh -l```
 
-(These are dead processes still in the process table)
+Delete a Tag
 
-```./otProcessManager listZoombieProcess```
+Delete a specific tag from the repository.
 
+```./gitTags.sh -d <tag_name>```
 
-Kill a Process by Name or PID
+## Part C: Commit Report Generation (gitCommitReport.sh) ##
+This script generates a commit report for a Git repository based on a specified time period. 
+The report includes commit details such as the commit ID, author information, commit message, and changed files.
 
-```./otProcessManager killProcess <processName or processID>```
+Generate a Commit Report
 
+Input the repository URL and the number of days for which to generate the report.
 
-List Processes Waiting for Resources
+```./gitCommitReport.sh -u <url> -d <days>```
 
-```./otProcessManager ListWaitingProcess```
+### How to Use These Scripts ###
+Clone the Repository
 
+Clone the Git repository where you want to manage branches, tags, and generate commit reports.
 
+Make Scripts Executable
 
-### Part B: Process Manager Utility (ProcessManager.sh) ###
-
-This tool helps us manage custom services or scripts by starting, stopping, checking their status, and changing their priority.
-
-What we can do with it:
-
-Start a Service
-
-```./ProcessManager.sh -o start -a <alias>```
-
-
-Check Service Status
-
-```./ProcessManager.sh -o status -a <alias>```
-
-
-Stop a Service
-
-```./ProcessManager.sh -o kill -a <alias>```
-
-
-Change Priority of a Service
-
-```./ProcessManager.sh -o priority -p <low/med/high> -a <alias>```
-
-
-List All Services We Started
-
-```./ProcessManager.sh -o list```
-
-
-Show Details of All Running Services
-
-```./ProcessManager.sh -o top```
-
-
-
-### Part C: Playing with Processes ###
-
-Here we explore how processes react to certain changes.
-
-Things we will try:
-
-Clear the log file of a running process
-
-Delete the log file of a running process and observe what happens
-
-Increase (elevate) the priority of a running process
+Make the scripts executable by running:
